@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEON HOLLOW 🎃 The Ultimate Halloween Spooktacular</title>
+  <meta name="description" content="Step into Neon Hollow, the ultimate interactive Halloween sanctuary. Carve Jack-O'-Lanterns, brew witch potions, consult the spooky Tarot oracle, whack graveyard ghouls, and unleash haunted soundscapes.">
+  <meta name="author" content="Mohd Ismail (India)">
+  <meta name="theme-color" content="#ff6b00">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Creepster&family=Outfit:wght@300;400;600;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E🎃%3C/text%3E%3C/svg%3E">
+</head>
+<body class="theme-twilight" id="app-body">
+  <!-- Dynamic Lightning Flash Canvas & Background FX -->
+  <canvas id="bg-canvas" class="bg-canvas" aria-hidden="true"></canvas>
+  <div id="lightning-overlay" class="lightning-overlay" aria-hidden="true"></div>
+
+  <!-- Global Soundwave Visualizer Bar -->
+  <div class="audio-viz-bar" id="audio-viz-bar" aria-hidden="true">
+    <div class="viz-bar"></div>
+    <div class="viz-bar"></div>
+    <div class="viz-bar"></div>
+    <div class="viz-bar"></div>
+    <div class="viz-bar"></div>
+    <div class="viz-bar"></div>
+    <div class="viz-bar"></div>
+    <div class="viz-bar"></div>
+  </div>
+
+  <div class="page-wrapper">
+    <!-- Top Bar Navigation & Atmospheric Bar -->
+    <header class="sanctum-header" id="sanctum-header">
+      <div class="header-left">
+        <div class="brand-badge" id="brand-badge">
+          <span class="brand-pumpkin" id="brand-pumpkin">🎃</span>
+          <div class="brand-titles">
+            <h1 class="brand-title">NEON HOLLOW</h1>
+            <span class="brand-tagline">ALL HALLOWS' SANCTUM</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Halloween Countdown Widget -->
+      <div class="countdown-widget" id="countdown-widget">
+        <span class="countdown-label">COUNTDOWN TO ALL HALLOWS' EVE</span>
+        <div class="countdown-digits">
+          <div class="digit-box"><span id="cd-days">00</span><small>DAYS</small></div>
+          <span class="digit-separator">:</span>
+          <div class="digit-box"><span id="cd-hours">00</span><small>HRS</small></div>
+          <span class="digit-separator">:</span>
+          <div class="digit-box"><span id="cd-mins">00</span><small>MIN</small></div>
+          <span class="digit-separator">:</span>
+          <div class="digit-box"><span id="cd-secs">00</span><small>SEC</small></div>
+        </div>
+      </div>
+
+      <!-- Atmospheric & Audio Controls -->
+      <div class="header-controls">
+        <!-- Mood Selector -->
+        <div class="control-group">
+          <label for="theme-selector" class="sr-only">Sanctum Mood</label>
+          <select id="theme-selector" class="spooky-select" title="Change Sanctum Mood">
+            <option value="theme-twilight">🎃 Pumpkin Twilight</option>
+            <option value="theme-toxic">🧪 Toxic Graveyard</option>
+            <option value="theme-blood">🩸 Blood Eclipse</option>
+            <option value="theme-phantom">👻 Phantom Mist</option>
+          </select>
+        </div>
+
+        <!-- Ambient Sound Switch -->
+        <button id="btn-ambient-sound" class="btn-icon-control" title="Toggle Ambient Wind & Drone" aria-label="Toggle Ambient Audio">
+          <span class="icon-speaker" id="speaker-icon">🔇</span>
+          <span class="btn-text">Ambient</span>
+        </button>
+
+        <!-- Thunder Strike Button -->
+        <button id="btn-summon-lightning" class="btn-icon-control lightning-btn" title="Summon Lightning Strike" aria-label="Summon Lightning">
+          ⚡ <span class="btn-text">Summon Thunder</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="spooky-nav" id="spooky-nav" aria-label="Sanctum Modules">
+      <button class="nav-tab active" data-tab="tab-carver" id="tab-btn-carver">
+        <span class="tab-icon">🎃</span>
+        <span class="tab-title">Jack-O'-Carver</span>
+      </button>
+      <button class="nav-tab" data-tab="tab-cauldron" id="tab-btn-cauldron">
+        <span class="tab-icon">🧪</span>
+        <span class="tab-title">Witch's Cauldron</span>
+      </button>
+      <button class="nav-tab" data-tab="tab-oracle" id="tab-btn-oracle">
+        <span class="tab-icon">🔮</span>
+        <span class="tab-title">Haunted Oracle</span>
+      </button>
+      <button class="nav-tab" data-tab="tab-graveyard" id="tab-btn-graveyard">
+        <span class="tab-icon">🦇</span>
+        <span class="tab-title">Graveyard Bash</span>
+      </button>
+      <button class="nav-tab" data-tab="tab-soundboard" id="tab-btn-soundboard">
+        <span class="tab-icon">🔊</span>
+        <span class="tab-title">Crypt Soundboard</span>
+      </button>
+      <button class="nav-tab" data-tab="tab-morph" id="tab-btn-morph">
+        <span class="tab-icon">🎭</span>
+        <span class="tab-title">Monster Morph</span>
+      </button>
+    </nav>
+
+    <!-- Main Dynamic Content Container -->
+    <main class="main-sanctum" id="main-sanctum">
+
+      <!-- ================= TAB 1: JACK-O'-CARVER ================= -->
+      <section class="sanctum-tab-content active" id="tab-carver" aria-labelledby="tab-btn-carver">
+        <div class="module-header">
+          <h2 class="module-title">JACK-O'-CARVER STUDIO</h2>
+          <p class="module-subtitle">Carve your own photorealistic Jack-O'-Lantern! Select stencils, sculpt freehand, and ignite the flickering inner candle.</p>
+        </div>
+
+        <div class="carver-layout">
+          <!-- Canvas Container -->
+          <div class="pumpkin-stage-container">
+            <div class="stage-frame" id="stage-frame">
+              <canvas id="pumpkin-canvas" width="600" height="600"></canvas>
+              <div class="flicker-light" id="flicker-light"></div>
+            </div>
+            <div class="stage-status" id="carver-status">
+              <span>Tool: <strong id="current-tool-label">Carving Knife</strong></span>
+              <span>Glow: <strong id="current-glow-label">Pumpkin Orange</strong></span>
+            </div>
+          </div>
+
+          <!-- Carving Tool Controls -->
+          <div class="carver-controls-panel glass-card">
+            <h3 class="panel-heading">🔪 Carving Tools</h3>
+            <div class="tool-buttons-grid">
+              <button class="tool-btn active" data-tool="knife" id="tool-knife" title="Carving Knife">
+                <span class="t-icon">🗡️</span> Freehand Knife
+              </button>
+              <button class="tool-btn" data-tool="gouge" id="tool-gouge" title="Broad Gouge">
+                <span class="t-icon">🪓</span> Broad Scoop
+              </button>
+              <button class="tool-btn" data-tool="eraser" id="tool-eraser" title="Patch Pumpkin Clay">
+                <span class="t-icon">🩹</span> Patch / Erase
+              </button>
+            </div>
+
+            <div class="control-slider-group">
+              <label for="carve-size">Blade Size: <span id="blade-size-display">16px</span></label>
+              <input type="range" id="carve-size" min="6" max="48" value="16" class="spooky-range">
+            </div>
+
+            <h3 class="panel-heading">✨ Spooky Stencils</h3>
+            <p class="helper-text">Click a stencil to stamp onto the pumpkin center:</p>
+            <div class="stencils-grid">
+              <button class="stencil-btn" data-stencil="wicked-smile" id="stencil-wicked-smile">😈 Wicked Grin</button>
+              <button class="stencil-btn" data-stencil="vamp-fangs" id="stencil-vamp-fangs">🧛 Vampire Fangs</button>
+              <button class="stencil-btn" data-stencil="evil-triangles" id="stencil-evil-triangles">📐 Classic Evil</button>
+              <button class="stencil-btn" data-stencil="spooky-bat" id="stencil-spooky-bat">🦇 Shadow Bat</button>
+              <button class="stencil-btn" data-stencil="screaming-ghoul" id="stencil-screaming-ghoul">😱 Screaming Ghoul</button>
+              <button class="stencil-btn" data-stencil="black-cat" id="stencil-black-cat">🐱 Hex Cat</button>
+            </div>
+
+            <h3 class="panel-heading">🕯️ Inner Candle Flame</h3>
+            <div class="flame-color-picker">
+              <button class="flame-btn active" data-color="#ff7a00" style="--c: #ff7a00;" title="Amber Flame">Amber</button>
+              <button class="flame-btn" data-color="#00ff88" style="--c: #00ff88;" title="Toxic Slime">Toxic</button>
+              <button class="flame-btn" data-color="#b026ff" style="--c: #b026ff;" title="Phantom Violet">Violet</button>
+              <button class="flame-btn" data-color="#ff0044" style="--c: #ff0044;" title="Blood Crimson">Crimson</button>
+              <button class="flame-btn" data-color="#00d4ff" style="--c: #00d4ff;" title="Ghostly Frost">Frost</button>
+            </div>
+
+            <div class="carver-action-row">
+              <button id="btn-undo-carve" class="btn-secondary">↩ Undo</button>
+              <button id="btn-reset-pumpkin" class="btn-secondary">🗑️ Fresh Pumpkin</button>
+              <button id="btn-save-pumpkin" class="btn-primary">💾 Save Carving</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ================= TAB 2: WITCH'S CAULDRON ================= -->
+      <section class="sanctum-tab-content" id="tab-cauldron" aria-labelledby="tab-btn-cauldron">
+        <div class="module-header">
+          <h2 class="module-title">THE WITCH'S ALCHEMICAL CAULDRON</h2>
+          <p class="module-subtitle">Toss arcane ingredients into the bubbling cauldron to conjure forbidden elixirs and unlock ancient spells in your grimoire!</p>
+        </div>
+
+        <div class="cauldron-layout">
+          <!-- Cauldron Visual Centerpiece -->
+          <div class="cauldron-stage glass-card">
+            <div class="cauldron-container" id="cauldron-dropzone">
+              <img src="assets/cauldron.jpg" alt="Ancient Bubbling Iron Cauldron" class="cauldron-img" id="cauldron-img">
+              <canvas id="cauldron-liquid-canvas" class="cauldron-canvas" width="400" height="400"></canvas>
+              <div class="brew-glow" id="brew-glow"></div>
+            </div>
+
+            <div class="brew-status-bar">
+              <div class="brew-recipe-preview">
+                <span>In Cauldron: </span>
+                <div class="added-ingredients-list" id="added-ingredients-list">
+                  <span class="empty-hint">The brew is clear. Drop in ingredients!</span>
+                </div>
+              </div>
+              <div class="brew-actions">
+                <button id="btn-stir-brew" class="btn-secondary">🥄 Stir Brew</button>
+                <button id="btn-brew-spell" class="btn-primary glow-pulse">🔮 Transmute Spell!</button>
+                <button id="btn-dump-cauldron" class="btn-secondary">Dump Potion</button>
+              </div>
+            </div>
+
+            <!-- Spell Result Notification Banner -->
+            <div class="spell-result-box hidden" id="spell-result-box">
+              <div class="spell-result-badge">✨ NEW SPELL CONJURED!</div>
+              <h3 class="spell-result-title" id="spell-result-title">Elixir of the Blood Moon</h3>
+              <p class="spell-result-desc" id="spell-result-desc">Grants night vision and transforms nearby shadows into playful spectral familiars.</p>
+            </div>
+          </div>
+
+          <!-- Ingredients Pantry Shelf & Grimoire -->
+          <div class="pantry-panel glass-card">
+            <h3 class="panel-heading">🌿 Arcane Pantry</h3>
+            <p class="helper-text">Click or drag ingredients into the boiling cauldron:</p>
+
+            <div class="ingredients-grid" id="ingredients-grid">
+              <div class="ingredient-card" draggable="true" data-id="eye" data-color="#00ff88">
+                <span class="ing-icon">👁️</span>
+                <span class="ing-name">Eye of Newt</span>
+                <small class="ing-type">Sight & Hex</small>
+              </div>
+              <div class="ingredient-card" draggable="true" data-id="blood" data-color="#ff0044">
+                <span class="ing-icon">🩸</span>
+                <span class="ing-name">Vampire Blood</span>
+                <small class="ing-type">Vitality & Dread</small>
+              </div>
+              <div class="ingredient-card" draggable="true" data-id="ecto" data-color="#00f7ff">
+                <span class="ing-icon">👻</span>
+                <span class="ing-name">Ectoplasm Vial</span>
+                <small class="ing-type">Ethereal Form</small>
+              </div>
+              <div class="ingredient-card" draggable="true" data-id="shroom" data-color="#c800ff">
+                <span class="ing-icon">🍄</span>
+                <span class="ing-name">Ghostcap Shroom</span>
+                <small class="ing-type">Mind Illusion</small>
+              </div>
+              <div class="ingredient-card" draggable="true" data-id="venom" data-color="#39ff14">
+                <span class="ing-icon">🕷️</span>
+                <span class="ing-name">Widow Venom</span>
+                <small class="ing-type">Toxic Paralysis</small>
+              </div>
+              <div class="ingredient-card" draggable="true" data-id="bone" data-color="#ffdd77">
+                <span class="ing-icon">💀</span>
+                <span class="ing-name">Lich Bone Dust</span>
+                <small class="ing-type">Necrotic Bond</small>
+              </div>
+              <div class="ingredient-card" draggable="true" data-id="bat" data-color="#6930c3">
+                <span class="ing-icon">🦇</span>
+                <span class="ing-name">Bat Wing Essence</span>
+                <small class="ing-type">Flight & Stealth</small>
+              </div>
+              <div class="ingredient-card" draggable="true" data-id="nightshade" data-color="#ff00bb">
+                <span class="ing-icon">🥀</span>
+                <span class="ing-name">Nightshade Petal</span>
+                <small class="ing-type">Eternal Slumber</small>
+              </div>
+            </div>
+
+            <!-- Grimoire Spellbook Tracking -->
+            <div class="grimoire-section">
+              <div class="grimoire-header">
+                <h4 class="grimoire-title">📖 Arcane Grimoire</h4>
+                <span class="badge-counter" id="grimoire-counter">0 / 6 Discovered</span>
+              </div>
+              <div class="grimoire-list" id="grimoire-list">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ================= TAB 3: HAUNTED ORACLE ================= -->
+      <section class="sanctum-tab-content" id="tab-oracle" aria-labelledby="tab-btn-oracle">
+        <div class="module-header">
+          <h2 class="module-title">THE HAUNTED ORACLE & SPIRIT SANCTUM</h2>
+          <p class="module-subtitle">Part the veil between worlds. Draw the 3D Tarot of Shadows or summon the spectral planchette upon the Ouija Spirit Board.</p>
+        </div>
+
+        <!-- Sub-navigation for Oracle -->
+        <div class="sub-nav">
+          <button class="sub-nav-btn active" id="subtab-btn-tarot">🃏 3D Tarot of Shadows</button>
+          <button class="sub-nav-btn" id="subtab-btn-ouija">🕯️ Ouija Spirit Board</button>
+        </div>
+
+        <!-- ORACLE SUBSECTION 1: 3D TAROT -->
+        <div class="oracle-subview active" id="view-tarot">
+          <div class="tarot-header-actions">
+            <p class="helper-text">Focus your intention upon the unseen realm, then draw your Three-Card Reading (Past, Present, Doom):</p>
+            <button id="btn-draw-tarot" class="btn-primary glow-pulse">🎴 Draw New Destiny</button>
+          </div>
+
+          <div class="tarot-board" id="tarot-board">
+            <!-- Card 1: Past Curse -->
+            <div class="tarot-slot" id="slot-past">
+              <span class="slot-badge">I. PAST HAUNTING</span>
+              <div class="tarot-card-wrapper" data-index="0">
+                <div class="tarot-card">
+                  <div class="card-face card-back">
+                    <div class="rune-pattern"></div>
+                    <span class="back-sigil">🔮</span>
+                    <span class="back-brand">NEON HOLLOW</span>
+                  </div>
+                  <div class="card-face card-front">
+                    <div class="card-front-content">
+                      <span class="card-arcana" id="card-0-arcana">XII</span>
+                      <div class="card-artwork-icon" id="card-0-icon">💀</div>
+                      <h4 class="card-name" id="card-0-name">The Grim Reaper</h4>
+                      <p class="card-reading" id="card-0-reading">A past cycle of demise has freed your spirit from ancient burdens.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2: Present Trial -->
+            <div class="tarot-slot" id="slot-present">
+              <span class="slot-badge">II. PRESENT SPECTER</span>
+              <div class="tarot-card-wrapper" data-index="1">
+                <div class="tarot-card">
+                  <div class="card-face card-back">
+                    <div class="rune-pattern"></div>
+                    <span class="back-sigil">🔮</span>
+                    <span class="back-brand">NEON HOLLOW</span>
+                  </div>
+                  <div class="card-face card-front">
+                    <div class="card-front-content">
+                      <span class="card-arcana" id="card-1-arcana">IX</span>
+                      <div class="card-artwork-icon" id="card-1-icon">🎃</div>
+                      <h4 class="card-name" id="card-1-name">The Hollow Pumpkin</h4>
+                      <p class="card-reading" id="card-1-reading">A beacon in the darkness illuminates treacherous truths concealed nearby.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 3: Looming Doom -->
+            <div class="tarot-slot" id="slot-future">
+              <span class="slot-badge">III. FUTURE DOOM</span>
+              <div class="tarot-card-wrapper" data-index="2">
+                <div class="tarot-card">
+                  <div class="card-face card-back">
+                    <div class="rune-pattern"></div>
+                    <span class="back-sigil">🔮</span>
+                    <span class="back-brand">NEON HOLLOW</span>
+                  </div>
+                  <div class="card-face card-front">
+                    <div class="card-front-content">
+                      <span class="card-arcana" id="card-2-arcana">XVI</span>
+                      <div class="card-artwork-icon" id="card-2-icon">🏰</div>
+                      <h4 class="card-name" id="card-2-name">The Cursed Manor</h4>
+                      <p class="card-reading" id="card-2-reading">A forgotten inheritance beckons you into corridors where time stands still.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ORACLE SUBSECTION 2: OUIJA SPIRIT BOARD -->
+        <div class="oracle-subview" id="view-ouija">
+          <div class="ouija-interface glass-card">
+            <div class="ouija-controls">
+              <input type="text" id="ouija-question-input" class="spooky-input" placeholder="Type your question to the spirits..." maxlength="80">
+              <button id="btn-ask-ouija" class="btn-primary">Ask Spirits</button>
+              <div class="ouija-quick-questions">
+                <button class="quick-q-btn" data-q="Is someone standing behind me?">"Is someone behind me?"</button>
+                <button class="quick-q-btn" data-q="What is hidden in the dark?">"What lurks in the dark?"</button>
+                <button class="quick-q-btn" data-q="Will I survive tonight?">"Will I survive tonight?"</button>
+              </div>
+            </div>
+
+            <!-- The Spirit Board Canvas & Interactive Planchette -->
+            <div class="ouija-board-container" id="ouija-board-container">
+              <div class="ouija-wood-board" id="ouija-wood-board">
+                <div class="board-top-row">
+                  <div class="board-word yes-word" id="ouija-yes">YES</div>
+                  <div class="board-moon-sun">🌕 👁️ ☀️</div>
+                  <div class="board-word no-word" id="ouija-no">NO</div>
+                </div>
+
+                <div class="board-arc-row arc-1" id="letters-row-1">
+                  <span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span><span>I</span><span>J</span><span>K</span><span>L</span><span>M</span>
+                </div>
+                <div class="board-arc-row arc-2" id="letters-row-2">
+                  <span>N</span><span>O</span><span>P</span><span>Q</span><span>R</span><span>S</span><span>T</span><span>U</span><span>V</span><span>W</span><span>X</span><span>Y</span><span>Z</span>
+                </div>
+                <div class="board-numbers-row" id="numbers-row">
+                  <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>0</span>
+                </div>
+
+                <div class="board-bottom-row">
+                  <div class="board-word goodbye-word" id="ouija-goodbye">GOODBYE</div>
+                </div>
+
+                <!-- Animated Planchette Pointer -->
+                <div class="ouija-planchette" id="ouija-planchette">
+                  <div class="planchette-lens">
+                    <div class="lens-glow"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Spirit Transcript Readout -->
+            <div class="ouija-readout glass-card">
+              <span class="readout-label">SPIRIT TRANSCRIPT:</span>
+              <p class="readout-text" id="ouija-readout-text">The spirits are listening... Enter a question.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ================= TAB 4: GRAVEYARD BASH MINI-GAME ================= -->
+      <section class="sanctum-tab-content" id="tab-graveyard" aria-labelledby="tab-btn-graveyard">
+        <div class="module-header">
+          <h2 class="module-title">GRAVEYARD BASH: CRYPT SLAYER</h2>
+          <p class="module-subtitle">Whack pesky ghosts, glowing pumpkins, and skeleton fiends before they vanish into the mist! Beware of cursed skulls!</p>
+        </div>
+
+        <div class="game-dashboard glass-card">
+          <div class="game-stat">
+            <span class="stat-name">SCORE</span>
+            <span class="stat-val" id="game-score">0</span>
+          </div>
+          <div class="game-stat">
+            <span class="stat-name">TIME LEFT</span>
+            <span class="stat-val" id="game-timer">30s</span>
+          </div>
+          <div class="game-stat">
+            <span class="stat-name">COMBO STREAK</span>
+            <span class="stat-val combo-active" id="game-combo">x1</span>
+          </div>
+          <div class="game-stat">
+            <span class="stat-name">BEST RECORD</span>
+            <span class="stat-val" id="game-highscore">0</span>
+          </div>
+          <div class="game-actions">
+            <button id="btn-start-game" class="btn-primary glow-pulse">⚔️ START HUNT</button>
+          </div>
+        </div>
+
+        <!-- 3x3 Graveyard Grid -->
+        <div class="graveyard-arena" id="graveyard-arena">
+          <div class="tombstone-plot" data-index="0">
+            <div class="tombstone">R.I.P</div>
+            <div class="creature-hole">
+              <div class="creature" data-type="empty"></div>
+            </div>
+          </div>
+          <div class="tombstone-plot" data-index="1">
+            <div class="tombstone">R.I.P</div>
+            <div class="creature-hole">
+              <div class="creature" data-type="empty"></div>
+            </div>
+          </div>
+          <div class="tombstone-plot" data-index="2">
+            <div class="tombstone">R.I.P</div>
+            <div class="creature-hole">
+              <div class="creature" data-type="empty"></div>
+            </div>
+          </div>
+          <div class="tombstone-plot" data-index="3">
+            <div class="tombstone">R.I.P</div>
+            <div class="creature-hole">
+              <div class="creature" data-type="empty"></div>
+            </div>
+          </div>
+          <div class="tombstone-plot" data-index="4">
+            <div class="tombstone">R.I.P</div>
+            <div class="creature-hole">
+              <div class="creature" data-type="empty"></div>
+            </div>
+          </div>
+          <div class="tombstone-plot" data-index="5">
+            <div class="tombstone">R.I.P</div>
+            <div class="creature-hole">
+              <div class="creature" data-type="empty"></div>
+            </div>
+          </div>
+          <div class="tombstone-plot" data-index="6">
+            <div class="tombstone">R.I.P</div>
+            <div class="creature-hole">
+              <div class="creature" data-type="empty"></div>
+            </div>
+          </div>
+          <div class="tombstone-plot" data-index="7">
+            <div class="tombstone">R.I.P</div>
+            <div class="creature-hole">
+              <div class="creature" data-type="empty"></div>
+            </div>
+          </div>
+          <div class="tombstone-plot" data-index="8">
+            <div class="tombstone">R.I.P</div>
+            <div class="creature-hole">
+              <div class="creature" data-type="empty"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Legend / Rules -->
+        <div class="game-legend glass-card">
+          <div class="legend-item"><span class="legend-icon">👻</span> Ghost (+100 pts)</div>
+          <div class="legend-item"><span class="legend-icon">🎃</span> Jack-O' (+150 pts)</div>
+          <div class="legend-item"><span class="legend-icon">🦇</span> Vampire Bat (+250 pts fast!)</div>
+          <div class="legend-item"><span class="legend-icon">🍬</span> Trick Treat (+300 pts)</div>
+          <div class="legend-item"><span class="legend-icon">💣</span> Cursed Skull (-150 pts & resets combo!)</div>
+        </div>
+      </section>
+
+
+      <!-- ================= TAB 5: CRYPT SOUNDBOARD ================= -->
+      <section class="sanctum-tab-content" id="tab-soundboard" aria-labelledby="tab-btn-soundboard">
+        <div class="module-header">
+          <h2 class="module-title">SYNTHESIZED CRYPT SOUNDBOARD</h2>
+          <p class="module-subtitle">12 procedural spooky sound effects synthesized live via the Web Audio API. No external downloads required!</p>
+        </div>
+
+        <div class="soundboard-container glass-card">
+          <div class="soundboard-grid">
+            <button class="sfx-pad" data-sound="lightning">
+              <span class="sfx-emoji">⚡</span>
+              <span class="sfx-title">Thunder Crash</span>
+              <span class="sfx-desc">Pink noise lightning sweep</span>
+            </button>
+            <button class="sfx-pad" data-sound="howl">
+              <span class="sfx-emoji">🐺</span>
+              <span class="sfx-title">Werewolf Howl</span>
+              <span class="sfx-desc">Modulated formant vocal</span>
+            </button>
+            <button class="sfx-pad" data-sound="ghost">
+              <span class="sfx-emoji">👻</span>
+              <span class="sfx-title">Ghostly Wail</span>
+              <span class="sfx-desc">Eerie sine pitch glide</span>
+            </button>
+            <button class="sfx-pad" data-sound="witch">
+              <span class="sfx-emoji">🧙‍♀️</span>
+              <span class="sfx-title">Witch Cackle</span>
+              <span class="sfx-desc">Staccato resonant burst</span>
+            </button>
+            <button class="sfx-pad" data-sound="door">
+              <span class="sfx-emoji">🚪</span>
+              <span class="sfx-title">Creaky Door</span>
+              <span class="sfx-desc">FM friction groan</span>
+            </button>
+            <button class="sfx-pad" data-sound="chains">
+              <span class="sfx-emoji">⛓️</span>
+              <span class="sfx-title">Phantom Chains</span>
+              <span class="sfx-desc">Metallic resonant cluster</span>
+            </button>
+            <button class="sfx-pad" data-sound="organ">
+              <span class="sfx-emoji">🎹</span>
+              <span class="sfx-title">Cathedral Organ</span>
+              <span class="sfx-desc">Minor chord sawtooth swell</span>
+            </button>
+            <button class="sfx-pad" data-sound="heartbeat">
+              <span class="sfx-emoji">💓</span>
+              <span class="sfx-title">Haunted Heartbeat</span>
+              <span class="sfx-desc">Low frequency double thump</span>
+            </button>
+            <button class="sfx-pad" data-sound="bats">
+              <span class="sfx-emoji">🦇</span>
+              <span class="sfx-title">Bat Swarm</span>
+              <span class="sfx-desc">High-pitch fluttering bursts</span>
+            </button>
+            <button class="sfx-pad" data-sound="bones">
+              <span class="sfx-emoji">💀</span>
+              <span class="sfx-title">Skeleton Bones</span>
+              <span class="sfx-desc">Percussive woodblock clatter</span>
+            </button>
+            <button class="sfx-pad" data-sound="musicbox">
+              <span class="sfx-emoji">🎠</span>
+              <span class="sfx-title">Creepy Music Box</span>
+              <span class="sfx-desc">Chilling bell-toned lullaby</span>
+            </button>
+            <button class="sfx-pad" data-sound="jumpscare">
+              <span class="sfx-emoji">🔪</span>
+              <span class="sfx-title">Jump-Scare Sting</span>
+              <span class="sfx-desc">Dissonant high tension chord</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ================= TAB 6: MONSTER MORPH ================= -->
+      <section class="sanctum-tab-content" id="tab-morph" aria-labelledby="tab-btn-morph">
+        <div class="module-header">
+          <h2 class="module-title">MONSTER MORPH: HALLOWEEN PERSONA</h2>
+          <p class="module-subtitle">Discover your supernatural true form! Generate your official All Hallows' Monster Identification Pass.</p>
+        </div>
+
+        <div class="morph-layout">
+          <!-- Morph Creator Form -->
+          <div class="morph-form-card glass-card">
+            <h3 class="panel-heading">🧬 Cryptid DNA Weaver</h3>
+            <div class="form-group">
+              <label for="morph-name">Mortal Name</label>
+              <input type="text" id="morph-name" class="spooky-input" placeholder="Enter your name (e.g. Vlad)" value="Mortal Traveler">
+            </div>
+
+            <div class="form-group">
+              <label for="morph-archetype">Supernatural Archetype</label>
+              <select id="morph-archetype" class="spooky-select">
+                <option value="vampire">🧛 Nocturnal Vampire Monarch</option>
+                <option value="witch">🧙‍♀️ Cyber-Witch Alchemist</option>
+                <option value="ghoul">💀 Undead Graveyard Warden</option>
+                <option value="pumpkin">🎃 Eldritch Pumpkin King</option>
+                <option value="phantom">👻 Spectral Void Wanderer</option>
+                <option value="werewolf">🐺 Bloodmoon Lycanthrope</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="morph-element">Haunted Element</label>
+              <select id="morph-element" class="spooky-select">
+                <option value="ectoplasm">🧪 Toxic Ectoplasm</option>
+                <option value="shadow">🌑 Abyssal Void</option>
+                <option value="hellfire">🔥 Cursed Jack-O-Lantern Flame</option>
+                <option value="frost">❄️ Crypt Frostbite</option>
+              </select>
+            </div>
+
+            <div class="morph-buttons-row">
+              <button id="btn-generate-morph" class="btn-primary glow-pulse">⚡ Transmute Identity</button>
+              <button id="btn-random-morph" class="btn-secondary">🎲 Random Chaos</button>
+            </div>
+          </div>
+
+          <!-- Collectible Monster Pass Badge -->
+          <div class="morph-badge-container">
+            <div class="monster-pass-card" id="monster-pass-card">
+              <div class="pass-hologram-strip"></div>
+              <div class="pass-header">
+                <span class="pass-seal">🎃 ALL HALLOWS' SANCTUM</span>
+                <span class="pass-id-num" id="pass-id-num">ID #HLW-7749</span>
+              </div>
+
+              <div class="pass-body">
+                <div class="pass-avatar-box">
+                  <div class="pass-avatar-glow" id="pass-avatar-glow"></div>
+                  <span class="pass-avatar-emoji" id="pass-avatar-emoji">🧛</span>
+                </div>
+                <div class="pass-info">
+                  <h3 class="pass-character-name" id="pass-name">Vlad the Sovereign</h3>
+                  <div class="pass-title" id="pass-title">Archduke of Midnight Terrors</div>
+                  <div class="pass-meta">
+                    <div><span>SPECIES:</span> <strong id="pass-species">Vampire Monarch</strong></div>
+                    <div><span>ELEMENT:</span> <strong id="pass-element">Abyssal Shadow</strong></div>
+                    <div><span>ZODIAC:</span> <strong id="pass-zodiac">Scorpio of Doom</strong></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pass-stats-grid">
+                <div class="pass-stat-bar-group">
+                  <div class="stat-label-row">
+                    <span>SPOOKINESS</span>
+                    <strong id="stat-spooky-val">94%</strong>
+                  </div>
+                  <div class="stat-progress-bar"><div class="stat-fill" id="stat-spooky-bar" style="width: 94%;"></div></div>
+                </div>
+                <div class="pass-stat-bar-group">
+                  <div class="stat-label-row">
+                    <span>CANDY GREED</span>
+                    <strong id="stat-candy-val">88%</strong>
+                  </div>
+                  <div class="stat-progress-bar"><div class="stat-fill" id="stat-candy-bar" style="width: 88%;"></div></div>
+                </div>
+                <div class="pass-stat-bar-group">
+                  <div class="stat-label-row">
+                    <span>NIGHT VISION</span>
+                    <strong id="stat-stealth-val">99%</strong>
+                  </div>
+                  <div class="stat-progress-bar"><div class="stat-fill" id="stat-stealth-bar" style="width: 99%;"></div></div>
+                </div>
+              </div>
+
+              <div class="pass-footer">
+                <div class="pass-signature">
+                  <span>OFFICIALLY CONJURED</span>
+                  <div class="sig-script" id="pass-sig">Neon Hollow Council</div>
+                </div>
+                <div class="pass-barcode">||| | |||| || ||| |||| |</div>
+              </div>
+            </div>
+
+            <div class="pass-actions">
+              <button id="btn-copy-pass" class="btn-primary">📋 Copy Monster Stats</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="sanctum-footer">
+      <div class="footer-content">
+        <p>🎃 <strong>NEON HOLLOW</strong> &mdash; Crafted for All Hallows' Eve with Pure HTML5, Modern Vanilla CSS, Web Audio API & Canvas Magic.</p>
+        <p class="developer-credit" style="margin-top: 0.5rem; font-size: 0.95rem; color: var(--accent-primary);">Developed with 🎃 & ⚡ by <strong>Mohd Ismail</strong> (India)</p>
+        <p class="copyright-note" style="margin-top: 0.35rem;">Happy Halloween 2026 &bull; Enter at your own peril &bull; No cookies stolen, only candy!</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/audio.js"></script>
+  <script src="js/canvas-fx.js"></script>
+  <script src="js/pumpkin-carver.js"></script>
+  <script src="js/potion-cauldron.js"></script>
+  <script src="js/oracle-tarot.js"></script>
+  <script src="js/graveyard-game.js"></script>
+  <script src="js/monster-morph.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
